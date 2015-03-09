@@ -21,24 +21,21 @@ func main() {
 
 	// Create a new DHT11Driver
 	// This button named "button" in the pin #11
-	dht11 := gpio.NewDirectPinDriver(r, "dht11", "7")
+	pin := gpio.NewDirectPinDriver(r, "dht11", "7")
 
 	// Create work for the robot
 	work := func() {
-
-		// when the button is pressed (push):
-		gobot.On(button.Event("push"), func(data interface{}) {
-			fmt.Println("button pressed") // show to the terminal indicates the button is pressed
-		})
-
-		// when the button is released
-		gobot.On(button.Event("release"), func(data interface{}) {
-			fmt.Println("button released") // show to the terminal indicates the button is released
-		})
-
-		gobot.Every(2*time.Second, func() {
-			dataSensor := dht11.DigitalRead()
-			fmt.Println(dataSensor)
+		// read the data
+		gobot.Every(20*time.Second, func() {
+			pin.DigitalWrite(1)
+			time.Sleep(500 * time.Millisecond)
+			pin.DigitalWrite(0)
+			time.Sleep(20 * time.Millisecond)
+			time.Sleep(160 * time.Microsecond)
+			for i := 0; i < 20; i++ {
+				fmt.Println(pin.DigitalRead())
+				time.Sleep(50 * time.Microsecond)
+			}
 		})
 	}
 
@@ -51,7 +48,7 @@ func main() {
 	// A name will be automatically generated if no name is supplied
 	robot := gobot.NewRobot("dhtSensor",
 		[]gobot.Connection{r},
-		[]gobot.Device{dht11},
+		[]gobot.Device{pin},
 		work,
 	)
 
