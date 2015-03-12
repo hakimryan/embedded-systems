@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 	"github.com/hybridgroup/gobot"
 	"github.com/hybridgroup/gobot/platforms/gpio"
 	"github.com/hybridgroup/gobot/platforms/raspi"
@@ -32,9 +33,9 @@ func main() {
 			pin.DigitalWrite(0)
 			time.Sleep(20 * time.Millisecond)
 			time.Sleep(160 * time.Microsecond)
-			for i := 0; i < 20; i++ {
+			for i := 0; i < 100; i++ {
 				fmt.Println(pin.DigitalRead())
-				time.Sleep(50 * time.Microsecond)
+				time.Sleep(10 * time.Microsecond)
 			}
 		})
 	}
